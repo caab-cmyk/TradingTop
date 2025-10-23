@@ -1,0 +1,14 @@
+artifact_uri: file:c:/Users/thene/OneDrive - universidadean.edu.co/VS Code/PythonFinanzas/TradingTop/mlflow-deploy/ruta/mlruns/386373499590121261/aa29f93f1d594f6193c7b2e576e55e87/artifacts
+end_time: 1761193501873
+entry_point_name: ''
+experiment_id: '386373499590121261'
+lifecycle_stage: active
+run_id: aa29f93f1d594f6193c7b2e576e55e87
+run_name: invincible-wren-0
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761193498017
+status: 3
+tags: []
+user_id: thene

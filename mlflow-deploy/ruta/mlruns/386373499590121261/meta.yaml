@@ -1,0 +1,6 @@
+artifact_location: file:c:/Users/thene/OneDrive - universidadean.edu.co/VS Code/PythonFinanzas/TradingTop/mlflow-deploy/ruta/mlruns/386373499590121261
+creation_time: 1761193079243
+experiment_id: '386373499590121261'
+last_update_time: 1761193079243
+lifecycle_stage: active
+name: ci-cd-mlflow-local

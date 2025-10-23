@@ -1,0 +1,22 @@
+artifact_path: file:c:/Users/thene/OneDrive - universidadean.edu.co/VS Code/PythonFinanzas/TradingTop/mlflow-deploy/ruta/mlruns/386373499590121261/models/m-f7e4a813fa5245a5ba92bb70aeac30fd/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.12.10
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.4.0
+mlflow_version: 3.5.1
+model_id: m-f7e4a813fa5245a5ba92bb70aeac30fd
+model_size_bytes: 563
+model_uuid: m-f7e4a813fa5245a5ba92bb70aeac30fd
+prompts: null
+run_id: ff76790061164dec8144a0ea377862b6
+utc_time_created: '2025-10-23 04:25:35.311632'

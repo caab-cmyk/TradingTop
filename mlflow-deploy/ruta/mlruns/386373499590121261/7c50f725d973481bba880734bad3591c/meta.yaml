@@ -1,0 +1,14 @@
+artifact_uri: file:c:/Users/thene/OneDrive - universidadean.edu.co/VS Code/PythonFinanzas/TradingTop/mlflow-deploy/ruta/mlruns/386373499590121261/7c50f725d973481bba880734bad3591c/artifacts
+end_time: 1761193084260
+entry_point_name: ''
+experiment_id: '386373499590121261'
+lifecycle_stage: active
+run_id: 7c50f725d973481bba880734bad3591c
+run_name: thoughtful-colt-416
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761193080351
+status: 4
+tags: []
+user_id: thene

@@ -1,0 +1,10 @@
+artifact_location: file:c:/Users/thene/OneDrive - universidadean.edu.co/VS Code/PythonFinanzas/TradingTop/mlflow-deploy/ruta/mlruns/386373499590121261/models/m-f7e4a813fa5245a5ba92bb70aeac30fd/artifacts
+creation_timestamp: 1761193535294
+experiment_id: '386373499590121261'
+last_updated_timestamp: 1761193539492
+model_id: m-f7e4a813fa5245a5ba92bb70aeac30fd
+model_type: null
+name: model
+source_run_id: ff76790061164dec8144a0ea377862b6
+status: 2
+status_message: null

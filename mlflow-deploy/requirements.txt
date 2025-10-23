@@ -1,0 +1,14 @@
+# MLOps y Modelado
+mlflow
+scikit-learn==1.4.0
+numpy==1.26.3
+
+# Herramientas de Desarrollo, EDA, y Visualización
+black==23.12.1
+pandas==2.2.0
+matplotlib==3.8.2
+seaborn==0.13.1
+
+# Otras Herramientas
+huggingface_hub[cli]==0.20.3
+streamlit==1.31.0

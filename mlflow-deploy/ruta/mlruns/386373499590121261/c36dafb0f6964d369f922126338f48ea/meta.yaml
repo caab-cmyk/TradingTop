@@ -1,0 +1,14 @@
+artifact_uri: file:c:/Users/thene/OneDrive - universidadean.edu.co/VS Code/PythonFinanzas/TradingTop/mlflow-deploy/ruta/mlruns/386373499590121261/c36dafb0f6964d369f922126338f48ea/artifacts
+end_time: 1761193315710
+entry_point_name: ''
+experiment_id: '386373499590121261'
+lifecycle_stage: active
+run_id: c36dafb0f6964d369f922126338f48ea
+run_name: casual-crow-556
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761193311512
+status: 4
+tags: []
+user_id: thene
