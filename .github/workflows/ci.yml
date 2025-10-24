@@ -21,6 +21,11 @@ jobs:
       - name: Instalar dependencias
         run: |
           pip install -r requirements.txt
+      
+      - name: Crear carpeta mlruns
+        run: mkdir -p mlruns
+       
+      
       - name: Entrenar modelos
         run: |
           python src/train_LinearR.py 
