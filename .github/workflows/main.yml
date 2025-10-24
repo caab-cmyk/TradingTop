@@ -1,0 +1,53 @@
+name: CI Pipeline (Training & Validation)
+
+# 1. Define el evento que activa el workflow
+on:
+  push:
+    branches:
+      - main  # Se ejecuta cuando haces push a la rama 'main'
+
+# 2. Define los trabajos (jobs) a ejecutar
+jobs:
+  train_and_validate:
+    name: Run CI Pipeline on Push
+    runs-on: ubuntu-latest  # Usa un runner basado en Linux (más rápido y estándar)
+
+    steps:
+      # 2.1. Descargar el código del repositorio
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # 2.2. Configurar Python (versión que estás usando, por ejemplo, 3.10)
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10' # Asegúrate que esta versión coincida con tu entorno local
+
+      # 2.3. Instalar dependencias (basado en tu requirements.txt)
+      - name: Install Dependencies
+        run: pip install -r mlflow-deploy/requirements.txt
+        # El comando debe ejecutarse desde la raíz, por eso incluimos la subcarpeta 'mlflow-deploy/'
+
+      # 2.4. Ejecutar el entrenamiento del Modelo Lineal (CI)
+      - name: Run Linear Regression Training
+        run: python mlflow-deploy/src/train_LinearR.py
+        
+      # 2.5. Ejecutar la Validación del Modelo
+      - name: Run Validation Script
+        run: python mlflow-deploy/src/validate.py
+
+      # 2.6. Ejecutar el entrenamiento del Modelo Logístico (CI)
+      - name: Run Logistic Regression Training
+        run: python mlflow-deploy/src/train_Logistic.py
+
+      # 2.7. Volver a ejecutar la Validación del Modelo (para el logístico)
+      - name: Run Validation Script (Logistic)
+        run: python mlflow-deploy/src/validate.py
+        
+      # 2.8. Subir los resultados de MLflow como artefacto (OPCIONAL, pero RECOMENDADO)
+      # Esto te permite descargar la carpeta mlruns para ver los resultados
+      - name: Upload MLflow Runs (mlruns) as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mlflow-tracking-results
+          path: mlflow-deploy/mlruns/
