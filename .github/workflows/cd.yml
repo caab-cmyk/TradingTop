@@ -16,17 +16,23 @@ jobs:
     steps:
       - name: Clonar el repositorio
         uses: actions/checkout@v3
+
+      - name: Descargar artefactos del run anterior
+        uses: actions/download-artifact@v4
+        with:
+          # 🛑 Debe coincidir con el nombre usado en el CI.
+          name: mlruns-ci-results 
+          # La descarga se hará en mlflow-deploy/, lo que recrea mlflow-deploy/mlruns/
+          path: mlflow-deploy/
+
+
       - name: Configurar Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.12'
       - name: Instalar dependencias
         run:  pip install -r requirements.txt
-      - name: Descargar artefactos del run anterior
-        uses: actions/download-artifact@v4
-        with:
-          name: mlruns
-          path: mlflow-deploy/
+      
       - name: Promocionar modelo (simulado)
         run: |
           echo "✅ Promoción del modelo validado a producción"
