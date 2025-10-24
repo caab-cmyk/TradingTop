@@ -18,8 +18,8 @@ jobs:
       - name: Preparar ruta de mlruns
         id: prepare_runs
         run: |
-          mkdir -p mlflow-deploy/mlruns
-          echo "mlruns_path=mlflow-deploy/mlruns" >> $GITHUB_OUTPUT
+          mkdir -p mlruns 
+          echo "mlruns_path=mlruns" >> $GITHUB_OUTPUT
 
       - name: Configurar Python
         uses: actions/setup-python@v4
@@ -32,11 +32,14 @@ jobs:
 
       - name: Entrenar modelos
         run: |
-          python mlflow-deploy/src/train_LinearR.py 
-          python mlflow-deploy/src/train_Logistic.py 
-          
-      - name: Validar modelo
-        run: python mlflow-deploy/src/validate.py
+          python src/train_LinearR.py 
+          python src/train_Logistic.py
+          python src/validate.py
+        # 🛑 AQUÍ FORZAMOS EL DIRECTORIO DE TRABAJO para que MLflow escriba en ./mlruns
+        working-directory: mlflow-deploy/
+      
+        
+
         
       # 🛑 ÚLTIMO PASO DEL JOB 1: Subir artefactos como ARTEFACTO DEL JOB
       - name: Save mlruns as Job Artifact
