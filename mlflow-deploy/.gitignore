@@ -1,0 +1,13 @@
+# .gitignore en la raíz de TRADINGTOP/
+
+# Directorios de Entorno Virtual de Python
+PFMlops/
+venv/
+.venv/
+
+# Archivos de Python generados
+*.pyc
+__pycache__/
+
+# Directorios de MLflow (Artifacts)
+mlflow-deploy/mlruns/
