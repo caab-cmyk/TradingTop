@@ -18,7 +18,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           # 🛑 Debe coincidir con el nombre usado en el CI.
-          name: mlruns-ci-results 
+          name: mlruns-ci-results
           # La descarga se hará en mlflow-deploy/, lo que recrea mlflow-deploy/mlruns/
           path: mlflow-deploy/
 
