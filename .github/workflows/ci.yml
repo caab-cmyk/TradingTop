@@ -4,52 +4,48 @@ on:
     branches: [main]
   workflow_dispatch:
 jobs:
+  # Job 1: Entrenar, Validar y subir como Artifact del JOB
   train-and-validate:
     runs-on: ubuntu-latest
-
-    outputs:
-      runs_path: ${{ steps.prepare_runs.outputs.mlruns_path }}
-
-
+    
+    # 🛑 ESTE BLOQUE DEBE SER ELIMINADO:
+    # outputs:
+    #   runs_path: ${{ steps.prepare_runs.outputs.mlruns_path }}
+      
     steps:
       - name: Clonar el repositorio
         uses: actions/checkout@v3
-
-      - name: Preparar ruta de mlruns
-        id: prepare_runs
-        run: |
-          mkdir -p mlruns 
-          echo "mlruns_path=mlruns" >> $GITHUB_OUTPUT
 
       - name: Configurar Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.12'
+          
       - name: Instalar dependencias
+        run: pip install -r mlflow-deploy/requirements.txt 
+        
+      # 🛑 CORRECCIÓN 1: Unificamos todo en un solo paso RUN con el working-directory
+      - name: Ejecutar entrenamiento y crear carpeta mlruns
         run: |
-          pip install -r mlflow-deploy/requirements.txt       
-
-
-      - name: Entrenar modelos
-        run: |
+          # Aseguramos la creación de la carpeta mlruns DENTRO del working-directory
+          mkdir -p mlruns 
+          
           python src/train_LinearR.py 
           python src/train_Logistic.py
           python src/validate.py
-        # 🛑 AQUÍ FORZAMOS EL DIRECTORIO DE TRABAJO para que MLflow escriba en ./mlruns
+        # AQUÍ FORZAMOS EL DIRECTORIO DE TRABAJO para que MLflow escriba en ./mlruns
         working-directory: mlflow-deploy/
-      
         
-
-        
-      # 🛑 ÚLTIMO PASO DEL JOB 1: Subir artefactos como ARTEFACTO DEL JOB
+      # Último paso del Job 1: Subir artefactos como ARTEFACTO DEL JOB
       - name: Save mlruns as Job Artifact
         uses: actions/upload-artifact@v4
         with:
           name: mlruns-job-temp
+          # La ruta es absoluta dentro del repositorio.
           path: mlflow-deploy/mlruns/
 
 
-# Job 2: Subir el Artefacto del JOB a GitHub Workflow
+  # Job 2: Subir el Artefacto del JOB a GitHub Workflow
   upload-to-workflow:
     needs: train-and-validate
     runs-on: ubuntu-latest
@@ -59,13 +55,11 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: mlruns-job-temp
-          path: mlruns_downloaded/ # Descarga el contenido en una carpeta temporal
+          path: mlruns_downloaded/ 
 
-      # 🛑 PASO CLAVE: Subir el artefacto como artefacto de Workflow
+      # Esta ruta de subida es correcta ahora que garantizamos la creación y subida consistente en el Job 1
       - name: Upload mlruns as Final Artifact
         uses: actions/upload-artifact@v4
         with:
-          # 🛑 Usamos el nombre FINAL que el CD buscará.
           name: mlruns 
-          # 🛑 La ruta es la carpeta descargada, más robusta.
-          path: mlruns_downloaded/
+          path: mlruns_downloaded/ 
