@@ -1,0 +1,14 @@
+artifact_uri: file:c:/Users/thene/OneDrive - universidadean.edu.co/VS Code/PythonFinanzas/TradingTop/mlflow-deploy/ruta/mlruns/386373499590121261/82c8fc5852134086b8fcf12e2cb9b80a/artifacts
+end_time: 1761267803955
+entry_point_name: ''
+experiment_id: '386373499590121261'
+lifecycle_stage: active
+run_id: 82c8fc5852134086b8fcf12e2cb9b80a
+run_name: amusing-rat-409
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761267801641
+status: 3
+tags: []
+user_id: thene
