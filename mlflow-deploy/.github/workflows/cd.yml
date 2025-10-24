@@ -1,24 +1,32 @@
 name: CD - Promoción y Despliegue de Modelo
 on:
-  workflow_dispatch:
+  workflow_run:
+    # Asegúrate que este nombre coincida EXACTAMENTE con el 'name' de tu ci.yml
+    workflows: ["CI - Entrenamiento y Validación de Modelo"] 
+    types: [completed]
+    branches: [main]
 jobs:
   deploy-model:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: mlflow-deploy
+
     steps:
       - name: Clonar el repositorio
         uses: actions/checkout@v3
       - name: Configurar Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.12'
       - name: Instalar dependencias
-        run: |
-          pip install -r requirements.txt
+        run:  pip install -r requirements.txt
       - name: Descargar artefactos del run anterior
         uses: actions/download-artifact@v4
         with:
           name: mlruns
-          path: mlruns/
+          path: mlflow-deploy/
       - name: Promocionar modelo (simulado)
         run: |
           echo "✅ Promoción del modelo validado a producción"
