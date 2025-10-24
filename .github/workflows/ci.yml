@@ -7,29 +7,62 @@ jobs:
   train-and-validate:
     runs-on: ubuntu-latest
 
+    outputs:
+      runs_path: ${{ steps.prepare_runs.outputs.mlruns_path }}
+
+
     steps:
       - name: Clonar el repositorio
         uses: actions/checkout@v3
+
+      - name: Preparar ruta de mlruns
+        id: prepare_runs
+        run: |
+          mkdir -p mlflow-deploy/mlruns
+          echo "mlruns_path=mlflow-deploy/mlruns" >> $GITHUB_OUTPUT
+
       - name: Configurar Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.12'
       - name: Instalar dependencias
         run: |
-          pip install -r mlflow-deploy/requirements.txt
-      
-      - name: Crear carpeta mlruns
-        run: mkdir -p mlflow-deploy/mlruns
-       
-      
+          pip install -r mlflow-deploy/requirements.txt       
+
+
       - name: Entrenar modelos
         run: |
           python mlflow-deploy/src/train_LinearR.py 
           python mlflow-deploy/src/train_Logistic.py 
+          
       - name: Validar modelo
         run: python mlflow-deploy/src/validate.py
-      - name: Upload MLflow Runs (mlruns) as Artifact
+        
+      # 🛑 ÚLTIMO PASO DEL JOB 1: Subir artefactos como ARTEFACTO DEL JOB
+      - name: Save mlruns as Job Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mlruns
+          name: mlruns-job-temp
           path: mlflow-deploy/mlruns/
+
+
+# Job 2: Subir el Artefacto del JOB a GitHub Workflow
+  upload-to-workflow:
+    needs: train-and-validate
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Descargar Artifacts del Job Anterior
+        uses: actions/download-artifact@v4
+        with:
+          name: mlruns-job-temp
+          path: mlruns_downloaded/ # Descarga el contenido en una carpeta temporal
+
+      # 🛑 PASO CLAVE: Subir el artefacto como artefacto de Workflow
+      - name: Upload mlruns as Final Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          # 🛑 Usamos el nombre FINAL que el CD buscará.
+          name: mlruns 
+          # 🛑 La ruta es la carpeta descargada, más robusta.
+          path: mlruns_downloaded/mlflow-deploy/mlruns/
