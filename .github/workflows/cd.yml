@@ -5,22 +5,24 @@ on:
     workflows: ["CI - Entrenamiento y Validación de Modelo"] 
     types: [completed]
     branches: [main]
+
+permissions:
+  contents: read
+  actions: read
+
 jobs:
   deploy-model:
     runs-on: ubuntu-latest
 
-    
     steps:
+      - name: Verificar que el CI terminó OK
+        if: ${{ github.event.workflow_run.conclusion != 'success' }}
+        run: |
+          echo "El CI no terminó con éxito. Abortando CD."
+          exit 1
+
       - name: Clonar el repositorio
         uses: actions/checkout@v3
-
-      - name: Descargar artefactos del run anterior
-        uses: actions/download-artifact@v4
-        with:
-          # 🛑 Debe coincidir con el nombre usado en el CI.
-          name: mlruns
-          # La descarga se hará en mlflow-deploy/, lo que recrea mlflow-deploy/mlruns/
-          path: mlflow-deploy/
 
 
       - name: Configurar Python
@@ -29,9 +31,28 @@ jobs:
           python-version: '3.12'
       - name: Instalar dependencias
         run: pip install -r mlflow-deploy/requirements.txt
-      
+
+      - name: Descargar artefacto del run del CI
+        uses: actions/download-artifact@v4
+        with:
+          name: mlruns-ci-results          # ⬅ mismo nombre que en el CI
+          run-id: ${{ github.event.workflow_run.id }}  # ⬅ run del CI que disparó este CD
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: ./mlruns                    # carpeta destino en el CD
+
+      - name: Listar archivos descargados (debug)
+        run: ls -R ./mlruns
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Instalar dependencias
+        run: pip install -r mlflow-deploy/requirements.txt
+
       - name: Promocionar modelo (simulado)
-        run: |
-          echo "✅ Promoción del modelo validado a producción"
-          # Aquí puedes agregar comandos para actualizar el estado del modelo en MLflow Registry
-          # o desplegarlo usando mlflow models serve
+        run: echo "✅ Promoción del modelo validado a producción"
