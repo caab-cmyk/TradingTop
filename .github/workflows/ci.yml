@@ -4,58 +4,42 @@ on:
     branches: [main]
   workflow_dispatch:
 jobs:
-  # Job 1: Entrenar, Validar y subir como Artifact del JOB
   train-and-validate:
     runs-on: ubuntu-latest
-    
+
+    # 🛑 ELIMINAR ESTA SECCIÓN PARA EVITAR CONFLICTOS CON LAS ACCIONES DE TERCEROS
+    # defaults:
+    #   run:
+    #     working-directory: mlflow-deploy
+        
     steps:
       - name: Clonar el repositorio
         uses: actions/checkout@v3
-
-      - name: Configurar Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.12'
+        
+      # ... (Configurar Python)
           
+      # 🛑 CORRECCIÓN: Instalar dependencias con la ruta COMPLETA
       - name: Instalar dependencias
-        run: pip install -r mlflow-deploy/requirements.txt 
+        run: pip install -r mlflow-deploy/requirements.txt
         
-      # 1. 🟢 PASO NUEVO: Aseguramos la creación de la carpeta mlruns desde la RAÍZ
+      # 🛑 CORRECCIÓN: Crear carpeta mlruns con la ruta COMPLETA
       - name: Crear carpeta mlruns
-        run: mkdir -p mlflow-deploy/mlruns 
-      
-      # 2. 🟢 PASO MODIFICADO: Solo ejecutamos los scripts DENTRO del working-directory
-      - name: Ejecutar entrenamiento y validación
-        run: |
-          python src/train_LinearR.py 
-          python src/train_Logistic.py
-          python src/validate.py
-        # Forzamos el directorio de trabajo para que MLflow escriba en ./mlruns (que ya existe)
-        working-directory: mlflow-deploy/
+        run: mkdir -p mlflow-deploy/mlruns
         
-      # Último paso del Job 1: Subir artefactos como ARTEFACTO DEL JOB
-      - name: Save mlruns as Job Artifact
+      # 🛑 CORRECCIÓN: Entrenar modelos con la ruta COMPLETA
+      - name: Entrenar modelos
+        run: |
+          python mlflow-deploy/src/train_LinearR.py 
+          python mlflow-deploy/src/train_Logistic.py 
+          
+      # 🛑 CORRECCIÓN: Validar modelo con la ruta COMPLETA
+      - name: Validar modelo
+        run: python mlflow-deploy/src/validate.py
+        
+      # 🛑 CORRECCIÓN FINAL: Subir artefactos con la ruta COMPLETA
+      - name: Upload MLflow Runs (mlruns) as Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mlruns-job-temp
-          # La ruta es absoluta dentro del repositorio.
+          name: mlruns-ci-results # Usar este nombre de ahora en adelante
+          # RUTA COMPLETA Y CORRECTA DESDE LA RAÍZ:
           path: mlflow-deploy/mlruns/
-
-
-  # Job 2: Subir el Artefacto del JOB a GitHub Workflow (Este bloque NO CAMBIA)
-  upload-to-workflow:
-    needs: train-and-validate
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Descargar Artifacts del Job Anterior
-        uses: actions/download-artifact@v4
-        with:
-          name: mlruns-job-temp
-          path: mlruns_downloaded/ 
-
-      - name: Upload mlruns as Final Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: mlruns 
-          path: mlruns_downloaded/ 
