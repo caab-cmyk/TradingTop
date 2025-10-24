@@ -8,6 +8,3 @@ venv/
 # Archivos de Python generados
 *.pyc
 __pycache__/
-
-# Directorios de MLflow (Artifacts)
-mlflow-deploy/mlruns/
