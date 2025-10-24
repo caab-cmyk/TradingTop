@@ -23,8 +23,8 @@ jobs:
           pip install -r requirements.txt
       - name: Entrenar modelos
         run: |
-          python src/train_LinearR.py # Ajustado a tus nombres de archivo
-          python src/train_Logistic.py # Ajustado a tus nombres de archivo
+          python src/train_LinearR.py 
+          python src/train_Logistic.py 
       - name: Validar modelo
         run: |
           python src/validate.py

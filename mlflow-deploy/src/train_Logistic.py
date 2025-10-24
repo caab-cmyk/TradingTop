@@ -9,7 +9,7 @@ from sklearn.model_selection import train_test_split
 
 # --- 1. CONFIGURACIÓN INICIAL DE MLFLOW ---
 # Asegúrate de que esta ruta coincida con la configuración de tu entorno
-MLFLOW_TRACKING_URI = "TRADINGTOP/mlflow-deploy/mlruns"
+MLFLOW_TRACKING_URI = "mlflow-deploy\mlruns"
 mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 mlflow.set_experiment("diabetes-logistic-model")
 

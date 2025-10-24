@@ -1,7 +1,7 @@
 name: CD - Promoción y Despliegue de Modelo
 on:
   workflow_run:
-    # Asegúrate que este nombre coincida EXACTAMENTE con el 'name' de tu ci.yml
+    # Asegúrar que este nombre coincida EXACTAMENTE con el 'name' de ci.yml
     workflows: ["CI - Entrenamiento y Validación de Modelo"] 
     types: [completed]
     branches: [main]
