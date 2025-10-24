@@ -65,4 +65,4 @@ jobs:
           # 🛑 Usamos el nombre FINAL que el CD buscará.
           name: mlruns 
           # 🛑 La ruta es la carpeta descargada, más robusta.
-          path: mlruns_downloaded/mlflow-deploy/mlruns/
+          path: mlruns_downloaded/mlruns/
