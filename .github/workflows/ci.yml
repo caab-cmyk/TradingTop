@@ -7,10 +7,6 @@ jobs:
   # Job 1: Entrenar, Validar y subir como Artifact del JOB
   train-and-validate:
     runs-on: ubuntu-latest
-    
-    # 🛑 ESTE BLOQUE DEBE SER ELIMINADO:
-    # outputs:
-    #   runs_path: ${{ steps.prepare_runs.outputs.mlruns_path }}
       
     steps:
       - name: Clonar el repositorio
