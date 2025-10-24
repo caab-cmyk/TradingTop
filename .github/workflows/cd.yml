@@ -9,10 +9,7 @@ jobs:
   deploy-model:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: mlflow-deploy
-
+    
     steps:
       - name: Clonar el repositorio
         uses: actions/checkout@v3
@@ -31,7 +28,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Instalar dependencias
-        run:  pip install -r requirements.txt
+        run: pip install -r mlflow-deploy/requirements.txt
       
       - name: Promocionar modelo (simulado)
         run: |
