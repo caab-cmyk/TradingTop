@@ -7,7 +7,7 @@ jobs:
   # Job 1: Entrenar, Validar y subir como Artifact del JOB
   train-and-validate:
     runs-on: ubuntu-latest
-      
+    
     steps:
       - name: Clonar el repositorio
         uses: actions/checkout@v3
@@ -20,16 +20,17 @@ jobs:
       - name: Instalar dependencias
         run: pip install -r mlflow-deploy/requirements.txt 
         
-      # 🛑 CORRECCIÓN 1: Unificamos todo en un solo paso RUN con el working-directory
-      - name: Ejecutar entrenamiento y crear carpeta mlruns
+      # 1. 🟢 PASO NUEVO: Aseguramos la creación de la carpeta mlruns desde la RAÍZ
+      - name: Crear carpeta mlruns
+        run: mkdir -p mlflow-deploy/mlruns 
+      
+      # 2. 🟢 PASO MODIFICADO: Solo ejecutamos los scripts DENTRO del working-directory
+      - name: Ejecutar entrenamiento y validación
         run: |
-          # Aseguramos la creación de la carpeta mlruns DENTRO del working-directory
-          mkdir -p mlruns 
-          
           python src/train_LinearR.py 
           python src/train_Logistic.py
           python src/validate.py
-        # AQUÍ FORZAMOS EL DIRECTORIO DE TRABAJO para que MLflow escriba en ./mlruns
+        # Forzamos el directorio de trabajo para que MLflow escriba en ./mlruns (que ya existe)
         working-directory: mlflow-deploy/
         
       # Último paso del Job 1: Subir artefactos como ARTEFACTO DEL JOB
@@ -41,7 +42,7 @@ jobs:
           path: mlflow-deploy/mlruns/
 
 
-  # Job 2: Subir el Artefacto del JOB a GitHub Workflow
+  # Job 2: Subir el Artefacto del JOB a GitHub Workflow (Este bloque NO CAMBIA)
   upload-to-workflow:
     needs: train-and-validate
     runs-on: ubuntu-latest
@@ -53,7 +54,6 @@ jobs:
           name: mlruns-job-temp
           path: mlruns_downloaded/ 
 
-      # Esta ruta de subida es correcta ahora que garantizamos la creación y subida consistente en el Job 1
       - name: Upload mlruns as Final Artifact
         uses: actions/upload-artifact@v4
         with:
